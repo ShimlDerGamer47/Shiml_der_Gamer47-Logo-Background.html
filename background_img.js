@@ -10,9 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.style.fontFamily = robotoBold;
     }
 
-    const params = new URLSearchParams(window.location.search);
-    const display = params.get("display");
-
     document.body.addEventListener("contextmenu", (e) => e.preventDefault());
 
     function backgroundCreateToken() {
@@ -83,14 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window.addEventListener("resize", debounce(updateImagePortrait));
     }
 
-    if (display === "none") {
-      console.log("Wird nicht angezeigt (display=none).");
-    } else {
       backgroundCreateToken();
-      console.log("Es wird angezeigt.");
-    }
-
-    console.log("Hinweis: Verwende ?display=none um das Bild zu verbergen.");
   } catch (error) {
     console.error("Fehler:", error);
   }
