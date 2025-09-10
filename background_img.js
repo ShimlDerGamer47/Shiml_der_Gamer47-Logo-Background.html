@@ -2,28 +2,25 @@ document.addEventListener("DOMContentLoaded", () => {
   try {
     const html = document.documentElement;
     const fontFamilyVar = "--font-family";
-    const robotoBold = getComputedStyle(html)
+    let robotoBold = getComputedStyle(html)
       .getPropertyValue(fontFamilyVar)
       .trim();
-    const body = document.body;
-    if (!body) return;
-
-    if (robotoBold) body.style.fontFamily = robotoBold;
+    if (robotoBold) {
+      robotoBold = robotoBold.split(",")[0].replace(/['"]/g, "").trim();
+      document.body.style.fontFamily = robotoBold;
+    }
 
     const params = new URLSearchParams(window.location.search);
-
     const display = params.get("display");
 
-    body.addEventListener("contextmenu", (e) => {
-      e.preventDefault();
-    });
+    document.body.addEventListener("contextmenu", (e) => e.preventDefault());
 
     function backgroundCreateToken() {
       const backgroundImgDiv = document.createElement("div");
       backgroundImgDiv.classList.add("background-img-container");
-      body.appendChild(backgroundImgDiv);
+      document.body.appendChild(backgroundImgDiv);
 
-      const mainPath = "/Img Ordner/";
+      const mainPath = "Img Ordner/";
       const subPath = "Background Img Ordner/";
       const imgFile = "Banner & Logo Overley 1.1.jpg";
 
@@ -32,11 +29,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const backgroundImg = document.createElement("img");
       backgroundImg.width = 1920;
       backgroundImg.height = 1080;
-      backgroundImg.src = imgFull;
+      backgroundImg.src = encodeURI(imgFull);
       backgroundImg.alt = "Hintergrund Bild von Shiml_der_Gamer47";
       backgroundImg.classList.add("background-img");
       backgroundImg.loading = "eager";
       backgroundImgDiv.appendChild(backgroundImg);
+
+      backgroundImg.addEventListener("error", () => {
+        console.error("Bild konnte nicht geladen werden:", imgFull);
+      });
 
       function elementSecurityToken() {
         const elementArray = [backgroundImgDiv, backgroundImg];
@@ -82,16 +83,14 @@ document.addEventListener("DOMContentLoaded", () => {
       window.addEventListener("resize", debounce(updateImagePortrait));
     }
 
-    if (display === "block") {
+    if (display === "none") {
+      console.log("Wird nicht angezeigt (display=none).");
+    } else {
       backgroundCreateToken();
       console.log("Es wird angezeigt.");
-    } else if (display === "none") {
-      console.log("Wird nicht angezeigt.");
     }
 
-    console.log(
-      "Log: '/?display=block' oder '/?display=none', dann wird es angezeigt oder nicht."
-    );
+    console.log("Hinweis: Verwende ?display=none um das Bild zu verbergen.");
   } catch (error) {
     console.error("Fehler:", error);
   }
